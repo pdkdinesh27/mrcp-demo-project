@@ -1,0 +1,470 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ *  Description: Configuration of the Google Dialogflow (GDF) plugin to the UniMRCP server (UMS)
+ *  Vendor: Universal Speech Solutions LLC
+ *  Author: arsen.chaloyan@unimrcp.org
+-->
+
+<!-- UMS GDF Document
+   Attributes:
+   *  license-file
+      This parameter specifies the license file to use. File name may include patterns containing a '*' sign.
+      If multiple files match the pattern, the most recent one gets used.
+   *  gapp-credentials-file
+      This parameter specifies the Google Application Credentials file to use. File name may include patterns containing a '*' sign.
+      If multiple files match the pattern, the most recent one gets used.
+   Elements:
+   *  license-server
+      This element specifies parameters of the license server. The use of license server is optional.
+   *  streaming-recognition
+      This element specifies parameters of the streaming recognition employed via gRPC.
+   *  synth-settings
+      This element specifies synthesis parameters. The settings are observed only if "generate-output-audio" is set to "true".
+   *  results
+      This element specifies parameters of recognition results set in RECOGNITION-COMPLETE events.
+   *  builtin-grammars
+      This element contains a list of built-in grammars.
+   *  speech-contexts
+      This element contains a list of speech contexts.
+   *  speech-dtmf-input-detector
+      This element specifies parameters of the speech and DTMF input detector.
+   *  utterance-manager
+      This element specifies parameters of the utterance manager.
+   *  rdr-manager
+      This element specifies parameters of the Recognition Details Record (RDR) manager.
+   *  monitoring-agent
+      This element specifies parameters of the monitoring agent.
+-->
+<umsgdf license-file="umsgdf_*.lic" gapp-credentials-file="*.json">
+
+   <!-- License Server Configuration
+   Attributes:
+   *  enable
+      This is a boolean parameter indicating whether the license server is enabled or disabled.
+      If the license server is enabled, the license-file attribute is not honored.
+   *  server-address
+      This parameter specifies the IP address or host name of the license server.
+   *  certificate-file
+      This parameter specifies the client certificate used to connect to the license server. File name may include patterns containing a '*' sign.
+      If multiple files match the pattern, the most recent one gets used.
+   *  ca-file
+      This parameter specifies the certificate authority used to validate the license server.
+   *  channel-count
+      This parameter specifies the exact number of channels to be checked out from the license server. If not specified, all the available channels are checked out.
+   *  http-proxy-address
+      This parameter specifies the IP address or host name of the HTTP proxy server, if used.
+   *  http-proxy-port
+      This parameter specifies the port number of the HTTP proxy server, if used.
+   Elements:
+   *  none
+   -->
+   <license-server
+      enable="false"
+      server-address="127.0.0.1"
+      certificate-file="unilic_client_*.crt"
+      ca-file="unilic_ca.crt"
+   />
+
+   <!-- Streaming Recognition Configuration
+   Attributes:
+   *  single-utterance
+      This boolean parameter specifies whether to detect a single spoken utterance or perform continuous recognition. Can be overridden by client.
+   *  interim-results
+      This boolean parameter specifies whether to request interim results or not.
+   *  start-of-input
+      This parameter specifies the source of start of input event sent to the client (use "service-originated" for an event originated based on interim results and "internal" for plugin-originated event).
+   *  language
+      This parameter specifies the default language to use. Can be overridden by client.
+      See the supported languages: https://cloud.google.com/dialogflow-enterprise/docs/reference/language
+   *  max-alternatives
+      This parameter specifies the maximum number of speech recognition result alternatives to be returned. Can be overridden by client.
+   *  project-id
+      This parameter specifies a project ID associated to the corresponding Dialogflow agent. Can be overridden by client.
+   *  skip-unsupported-grammars
+      This boolean parameter specifies whether to skip or raise an error while referencing a malformed or not supported grammar.
+   *  skip-empty-results
+      This boolean parameter specifies whether to implicitly initiate a new gRPC request if the current one completes with an empty result. Can be overridden by client.
+   *  skip-no-input
+      This boolean parameter specifies whether to implicitly initiate a new gRPC request if a no-input event is received from Dialogflow (CX only). Can be overridden by client.
+   *  transcription-grammar
+      This parameter specifies the name of the built-in speech transcription grammar. The grammar can be referenced as builtin:speech/transcribe or builtin:grammar/transcribe,
+      where "transcribe" is the default value of this parameter.
+   *  grammar-param-separator
+      This parameter specifies a seprator of optional parameters passed to a built-in grammar. The separator defaults to ';'.
+   *  generate-output-audio
+      This boolean parameter specifies whether to enable generation of output audio.
+   *  word-info
+      This boolean parameter specifies whether to return word-level time offset information. Can be overridden by client.
+   *  model
+      This parameter specifies the domain-specific model, if used. Can be overridden by client.
+   *  model-variant
+      This parameter specifies the variant of the specified speech model, if used. Can be overridden by client.
+   *  environment
+      This parameter specifies the custom environment, if used. Can be overridden by client.
+   *  http-proxy
+      This parameter specifies the URI of HTTP proxy, if used.
+   *  stream-creation-timeout
+      This parameter specifies how long to wait for gRPC stream creation. If timeout is set 0, no timer is used. Otherwise, if timeout is elapsed, gRPC stream creation is cancelled.
+      The recommended range is [200 ms .. 2000 ms].
+   *  inter-result-timeout
+      This parameter specifies a timeout between interim results containing transcribed speech. If the timeout is elapsed, input is considered complete. The timeout is specified in ms and defaults to 0 (disabled).
+   *  grpc-log-redirection
+      This boolean parameter specifies whether to enable gRPC log redirection.
+   *  grpc-log-verbosity
+      This parameter specifies gRPC logging verbosity. One of DEBUG, INFO, ERROR. See GRPC_VERBOSITY for more info.
+   *  grpc-log-trace
+      This parameter specifies a comma separated list of tracers producing gRPC logs. Use 'all' to turn all tracers on. See GRPC_TRACE for more info.
+   *  max-recv-message-length
+      This parameter specifies the gRPC max receive message length in bytes.
+   *  max-send-message-length
+      This parameter specifies the gRPC max send message length in bytes.
+   *  api
+      This parameter specifies the Dialogflow API to use. One of v2, v2beta1, v3beta1, v3.
+   *  service-uri
+      This parameter specifies the service endpoint and defaults to dialogflow.googleapis.com:443.
+   *  location
+      This parameter specifies the region/location of the agent. The global endpoint is used if the location is not specified.
+   *  allow-overrides
+      This boolean parameter specifies whether to allow overrides of global configuration parameters per MRCP request. Defaults to true.
+   Elements:
+   *  none
+   -->
+   <streaming-recognition
+      single-utterance="true"
+      interim-results="true"
+      start-of-input="service-originated"
+      language="en-US"
+      max-alternatives="1"
+      project-id=""
+      skip-unsupported-grammars="true"
+      skip-empty-results="true"
+      skip-no-input="true"
+      transcription-grammar="transcribe"
+      grammar-param-separator=";"
+      generate-output-audio="false"
+      word-info="false"
+      model=""
+      model-variant=""
+      environment=""
+      stream-creation-timeout="0"
+      inter-result-timeout="0"
+      grpc-log-redirection="false"
+      grpc-log-verbosity=""
+      grpc-log-trace=""
+      max-recv-message-length="-1"
+      max-send-message-length="-1"
+      api="v2"
+      allow-overrides="true"
+   />
+
+  <!-- Synthesis Settings
+   Attributes:
+   *  voice-name
+      This parameter specifies the default voice name. Can be overridden by client.
+   *  voice-gender
+      This parameter specifies the default voice gender. Can be overridden by client.
+   *  prosody-rate
+      This parameter specifies the default prosody rate (speaking_rate) in the range [0.25, 4.0]. Can be overridden by client.
+   *  prosody-volume
+      This parameter specifies the default prosody volume (volume_gain_db) in the range [-96.0, 16.0]. Can be overridden by client.
+   *  prosody-pitch
+      This parameter specifies the default prosody pitch in the range [-20.0, 20.0].
+   *  effects-profile
+      This parameter specifies the audio effects profile identifier.
+      See https://cloud.google.com/text-to-speech/docs/audio-profiles
+   Elements:
+   *  none
+   -->
+  <synth-settings
+     voice-name=""
+     voice-gender=""
+     prosody-rate=""
+     prosody-volume=""
+     prosody-pitch=""
+     effects-profile=""
+   />
+
+  <!-- Recognition Results Configuration
+   Attributes:
+   *  format
+      This parameter specifies the format of results to be returned to the client (use "standard" for NLSML and "json" for JSON).
+   *  indent
+      This parameter specifies the indent to use while composing the results.
+   *  replace-dots
+      This boolean parameter specifies whether to replace '.' with '_' in the parameter names, used while composing an XML content.
+      The parameter is observed only if the format is set to "standard".
+   *  replace-dashes
+      This boolean parameter specifies whether to replace '-' with '_' in the parameter names, used while composing an XML content.
+      The parameter is observed only if the format is set to "standard".
+   *  replace-new-lines
+      This boolean parameter specifies whether to replace '\n' with ' ' in the XML element text, used while composing an XML content.
+      The parameter is observed only if the format is set to "standard".
+   *  confidence-format
+      This parameter specifies the format of the confidence score to be returned (use "auto" for a format based on protocol version, "mrcpv2" for a float value in the range of 0..1, "mrcpv1" for an integer value in the range of 0..100).
+      The parameter is observed only if the format is set to "standard".
+   *  tag-format
+      This parameter specifies the format of the instance element to be returned.
+      The parameter is observed only if the format is set to "standard". The following values can be used:
+      * "semantics/xml" for query result represented in XML [default]
+      * "semantics/json" for query result represented in JSON
+      * "swi-semantics/xml" for query result set in an inner <SWI_meaning> element represented in XML
+      * "swi-semantics/json" for query result set in an inner <SWI_meaning> element represented in JSON
+   *  event-input-mode
+      This parameter specifies the input mode in NLSML used with a triggered event. The parameter may need to be set to "speech" if the client does not accept "event".
+   *  event-input-text
+      This parameter specifies the input text to be filled in NLSML with a triggered event. The parameter may need to be set to a non-empty string when CX agents are used to address interop with VXML platforms.
+   Elements:
+   *  none
+   -->
+   <results
+      format="json"
+      indent="0"
+      replace-dots="true"
+      replace-dashes="true"
+      replace-new-lines="true"
+      confidence-format="auto"
+      tag-format="semantics/json"
+      event-input-mode="event"
+      event-input-text=""
+   />
+
+   <!-- Built-in Grammars Definition
+   Attributes:
+   *  none
+   Elements:
+   *  builtin-grammar
+      This element specifies a built-in grammar. Zero, one or more built-in grammars can be specified.
+   -->
+   <builtin-grammars>
+      <!-- Built-in Grammar Definition
+      Attributes:
+      *  enable
+         This is a boolean parameter indicating whether built-in grammar is enabled or disabled.
+      *  mode
+         This parameter specifies the mode of the grammar: either "speech" or "dtmf".
+      *  name
+         This parameter specifies the name of the grammar being referenced in MRCP requests.
+      *  action
+         This parameter specifies the action name to be triggered by Dialogflow.
+      *  parameter-name
+         This parameter specifies the parameter name to be set by Dialogflow.
+      *  project-id
+         This parameter specifies an optional project ID associated to the corresponding Dialogflow agent. If not specified, the default one is used.
+      Elements:
+      *  none
+      -->
+     
+      <!--
+         These are sample built-in grammars provided for demonstration purposes only.
+         The sample grammars are disabled by default and require certain Dialogflow agent configuration.
+      -->
+      <builtin-grammar enable="false" mode="speech" name="boolean" action="builtin.boolean" parameter-name="option" project-id=""/>
+      <builtin-grammar enable="false" mode="dtmf" name="boolean" action="builtin.boolean" parameter-name="option" project-id="" length="1" input="event"/>
+
+      <builtin-grammar enable="false" mode="speech" name="number" action="builtin.number" parameter-name="number" project-id=""/>
+      <builtin-grammar enable="false" mode="dtmf" name="number" action="builtin.number" parameter-name="number" project-id="" input="text"/>
+   </builtin-grammars>
+
+   <!-- Speech Contexts Definition
+   Attributes:
+   *  none
+   Elements:
+   *  speech-context
+      This element specifies a speech context. Zero, one or more speech-context elements can be specified.
+   -->
+   <speech-contexts>
+      <!-- Speech Context Definition
+      Attributes:
+      *  id
+         This parameter specifies a unique string identifier of speech context to be referenced by the client.
+      *  language
+         This parameter specifies the language of phrases defined in speech context. If not specified, defaults to the language used with RECOGNIZE.
+      *  speech-complete
+         This is a boolean parameter indicating whether to complete input as soon as an interim result matches one of the specified phrases.
+      *  enable
+         This is a boolean parameter indicating whether speech context is enabled or disabled.
+      Elements:
+      *  phrase
+         This element specifies a phrase in speech context. One or more phrase elements can be specified.
+      -->
+
+      <!--
+         This is a sample speech context used as a hint.
+         The sample speech context is disabled by default and provided for demonstration purposes only.
+      -->
+      <speech-context id="booking" language="en-US" enable="false">
+         <phrase>I would like to book a flight from New York to Rome with a ticket eligible for free cancellation</phrase>
+         <phrase>I would like to book a one-way flight from New York to Rome</phrase>
+      </speech-context>
+
+      <!--
+         This is a sample speech context used as a basic grammar.
+         The sample speech context is disabled by default and provided for demonstration purposes only.
+      -->
+      <speech-context id="boolean" language="en-US" speech-complete="true" enable="false">
+         <phrase>yes</phrase>
+         <phrase>sure</phrase>
+         <phrase>correct</phrase>
+         <phrase>no</phrase>
+         <phrase>not sure</phrase>
+         <phrase>incorrect</phrase>
+      </speech-context>
+   </speech-contexts>
+
+   <!-- Speech and DTMF Input Detector
+   Attributes:
+   *  vad-mode
+      This integer parameter specifies VAD operating mode. A higher mode is more aggressive and, as a result, is more restrictive in reporting speech.
+      The acceptable range is [0 .. 3].
+   *  speech-start-timeout
+      This timeout specifies how long to wait in transition mode before triggering a start of speech input event.
+      The recommended range is [10 ms .. 300 ms].
+   *  speech-complete-timeout
+      This timeout specifies how long to wait in transition mode before triggering an end of speech input event.
+      The complete timeout is used when there is an interim result available.
+      The recommended range is [300 ms .. 1500 ms].
+   *  speech-incomplete-timeout
+      This timeout specifies how long to wait in transition mode before triggering an end of speech input event, 
+      and is observed only when delivery of interim results is enabled from configuration.
+      The incomplete timeout is used as long as there is no interim result available. Afterwards, the complete timeout is used.
+      The recommended range is [1000 ms .. 3000 ms].
+   *  noinput-timeout
+      This timeout specifies how long to wait before triggering a no-input event.
+      The recommended range is [3000 ms .. 10000 ms]. Can be overridden by client.
+   *  input-timeout
+      This timeout specifies how long to wait for input to complete.
+      The recommended range is [5000 ms .. unlimited]. Can be overridden by client.
+   *  dtmf-interdigit-timeout
+      This timeout specifies a DTMF inter-digit timeout.
+      The recommended range is [1000 ms .. 10000 ms]. Can be overridden by client.
+   *  dtmf-term-timeout
+      This timeout specifies a DTMF input termination timeout.
+      The recommended range is [1000 ms .. 10000 ms]. Can be overridden by client.
+   *  dtmf-term-char
+      This parameter specifies a DTMF input termination character.
+      The recommended value is ''. Can be overridden by client.
+   *  speech-leading-silence
+      This parameter specifies desired silence interval preceding spoken input.
+      The recommended range is [100 ms .. 500 ms].
+   *  speech-trailing-silence
+      This parameter specifies desired silence interval following spoken input.
+      The recommended range is [100 ms .. 500 ms].
+   *  speech-output-period
+      This parameter specifies an interval speech frames are written to the recognizer.
+      The recommended range is [50 ms .. 500 ms].
+   Elements:
+   *  none
+   -->
+   <speech-dtmf-input-detector
+      vad-mode="2"
+      speech-start-timeout="50"
+      speech-complete-timeout="1000"
+      speech-incomplete-timeout="15000"
+      noinput-timeout="5000"
+      input-timeout="30000"
+      dtmf-interdigit-timeout="5000"
+      dtmf-term-timeout="10000"
+      dtmf-term-char=""
+      speech-leading-silence="300"
+      speech-trailing-silence="300"
+      speech-output-period="200"
+   />
+
+   <!-- Utterance Manager
+   Attributes:
+   *  save-waveforms
+      This parameter specifies whether to save waveforms or not.
+   *  purge-existing
+      This parameter specifies whether to delete existing waveforms on start-up.
+   *  max-file-age
+      This parameter specifies a time interval in minutes after expiration of which a waveform is deleted. Set 0 for infinite.
+   *  max-file-count
+      This parameter specifies the max number of waveforms to store. If reached, the oldest waveform is deleted. Set 0 for infinite.
+   *  waveform-base-uri
+      This parameter specifies the base URI used to compose an absolute waveform URI.
+   *  waveform-folder
+      This parameter specifies a folder the waveforms are stored in. Defaults to ${UniMRCPInstallDir}/var.
+   *  file-prefix
+      This parameter specifies a prefix used to compose the name of the file to be stored. Defaults to 'umsgdf-', if not specified.
+   *  use-logging-tag
+      This parameter specifies whether to use the MRCP header field Logging-Tag, if present, to compose the name of the file to be stored.
+   Elements:
+   *  none
+   -->
+   <utterance-manager
+      save-waveforms="false"
+      purge-existing="false"
+      max-file-age="60"
+      max-file-count="100"
+      waveform-base-uri="http://localhost/utterances/"
+      waveform-folder=""
+      use-logging-tag="false"
+   />
+
+   <!-- Recognition Details Record (RDR) Manager
+   Attributes:
+   *  save-records
+      This parameter specifies whether to save recognition details records or not.
+   *  purge-existing
+      This parameter specifies whether to delete existing records on start-up.
+   *  max-file-age
+      This parameter specifies a time interval in minutes after expiration of which a record is deleted. Set 0 for infinite.
+   *  max-file-count
+      This parameter specifies the max number of records to store. If reached, the oldest record is deleted. Set 0 for infinite.
+   *  record-folder
+      This parameter specifies a folder to store recognition details records in. Defaults to ${UniMRCPInstallDir}/var.
+   *  file-prefix
+      This parameter specifies a prefix used to compose the name of the file to be stored. Defaults to 'umsgdf-', if not specified.
+   *  use-logging-tag
+      This parameter specifies whether to use the MRCP header field Logging-Tag, if present, to compose the name of the file to be stored.
+   Elements:
+   *  none
+   -->
+   <rdr-manager
+      save-records="false"
+      purge-existing="false"
+      max-file-age="60"
+      max-file-count="100"
+      record-folder=""
+      use-logging-tag="false"
+   />
+
+   <!-- Monitoring Agent
+   Attributes:
+   *  refresh-period
+      This parameter specifies a time interval in seconds used to periodically refresh usage details. See <usage-refresh-handler>.
+   Elements:
+   *  usage-change-handler
+   *  usage-refresh-handler
+   -->
+   <monitoring-agent refresh-period="60">
+      <!-- Handler of usage change event
+      Attributes:
+      *  none
+      Elements:
+      *  log-usage
+      *  update-usage
+      *  dump-channels
+      -->
+      <usage-change-handler>
+         <log-usage enable="true" priority="NOTICE"/>
+         <update-usage enable="false" status-file="umsgdf-usage.status"/>
+         <dump-channels enable="false" status-file="umsgdf-channels.status"/>
+      </usage-change-handler>
+
+      <!-- Handler of usage refresh timeout
+      Attributes:
+      *  none
+      Elements:
+      *  log-usage
+      *  update-usage
+      *  dump-channels
+      -->
+      <usage-refresh-handler>
+         <log-usage enable="false" priority="NOTICE"/>
+         <update-usage enable="false" status-file="umsgdf-usage.status"/>
+         <dump-channels enable="false" status-file="umsgdf-channels.status"/>
+      </usage-refresh-handler>
+   </monitoring-agent>
+
+</umsgdf>
